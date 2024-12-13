@@ -10,7 +10,11 @@ class TaskDetailProvider extends ChangeNotifier {
   TextEditingController descriptionController = TextEditingController(text: "");
   TextEditingController deadLineController = TextEditingController(text: "");
 
-  changeValue(bool val) {
+  clearValues() {
+    data = null;
+    nameController = TextEditingController(text: "");
+    descriptionController = TextEditingController(text: "");
+    deadLineController = TextEditingController(text: "");
     notifyListeners();
   }
 
@@ -26,10 +30,19 @@ class TaskDetailProvider extends ChangeNotifier {
         onFailure: (e) {});
   }
 
-  Future<void> saveTaskDetail({int? id}) async {
+  Future<void> updateTaskDetail({int? id}) async {
     CommonRepoImpl().updateTask(
         id: id,
         data: TaskModel(name: nameController.text, description: descriptionController.text, deadline: deadLineController.text),
+        onSuccess: (response) {
+          print("response- > ${response}");
+
+          notifyListeners();
+        },
+        onFailure: (e) {});
+  }
+  Future<void> saveTaskDetail({int? id}) async {
+    CommonRepoImpl().saveTask(saveDetails:  TaskModel(name: nameController.text, description: descriptionController.text, deadline: deadLineController.text),
         onSuccess: (response) {
           print("response- > ${response}");
 

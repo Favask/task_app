@@ -58,10 +58,10 @@ class DrawerScreen extends StatelessWidget {
                         ),
                         ListTile(
                           leading: Icon(
-                            Icons.incomplete_circle_outlined,
+                            Icons.incomplete_circle,
                             color: Theme.of(context).iconTheme.color,
                           ),
-                          title: Text(provider.loginResponse?.percentage.toString() ?? "" "%"),
+                          title: Text("${provider.loginResponse?.percentage.toString() ?? ""} %"),
                           onTap: () {},
                         ),
                         ListTile(

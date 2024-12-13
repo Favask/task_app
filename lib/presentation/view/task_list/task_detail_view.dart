@@ -7,19 +7,19 @@ import 'package:provider/provider.dart';
 
 class TaskDetails extends StatefulWidget {
   const TaskDetails({super.key, this.id});
-   final int? id;
+  final int? id;
   @override
   State<TaskDetails> createState() => _TaskDetailsState();
 }
 
 class _TaskDetailsState extends State<TaskDetails> {
-
   @override
   void initState() {
     TaskDetailProvider provider = NavigatorKey.navKey.currentState!.context.read<TaskDetailProvider>();
     provider.fetchTaskDetail(id: widget.id);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskDetailProvider>(
@@ -45,7 +45,8 @@ class _TaskDetailsState extends State<TaskDetails> {
                   CustomTextFormField(
                     labelText: "Description",
                     controller: value.descriptionController,
-                  ),  CustomTextFormField(
+                  ),
+                  CustomTextFormField(
                     labelText: "Deadline",
                     controller: value.deadLineController,
                   ),
@@ -85,7 +86,8 @@ class _TaskDetailsState extends State<TaskDetails> {
                           padding: const EdgeInsets.only(right: 8.0),
                           child: ElevatedButton(
                             onPressed: () async {
-                              value.saveTaskDetail(id: widget.id);
+                              widget.id == null ? value.saveTaskDetail() :
+                              value.updateTaskDetail(id: widget.id);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: themeColor, // Button color
@@ -104,6 +106,13 @@ class _TaskDetailsState extends State<TaskDetails> {
                 ],
               ),
             ));
+  }
+
+  @override
+  void dispose() {
+    TaskDetailProvider provider = NavigatorKey.navKey.currentState!.context.read<TaskDetailProvider>();
+    provider.clearValues();
+    super.dispose();
   }
 }
 

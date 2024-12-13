@@ -78,8 +78,8 @@ class CommonRepoImpl {
   }
 
   Future<void> fetchTaskDetails({int? id, required Function(TaskDetailData?) onSuccess, required Function(Exception) onFailure}) async {
-    // String endpoint = "/api/app/task-info/$id";
-    String endpoint = "/api/app/task-info/11";
+     String endpoint = "/api/app/task-info/$id";
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String token = prefs.getString('token') ?? '';
 
@@ -91,7 +91,7 @@ class CommonRepoImpl {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/x-www-form-urlencoded",
- 
+          "Authorization": "Bearer $token",
         },
       );
       print("response.statusCode > ${response.statusCode}");
@@ -107,19 +107,23 @@ class CommonRepoImpl {
     }
   }
 
-  Future<void> saveTask(TaskModel saveDetails, Function(BasicResponse) onSuccess, Function(Exception) onFailure) async {
+  Future<void> saveTask({required TaskModel saveDetails, required Function(BasicResponse) onSuccess, required Function(Exception) onFailure}) async {
     String endpoint = "/api/app/store-task";
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '';
     final url = Uri.parse(baseUrl + endpoint);
     print("url- > $url");
+    print("data- > ${saveDetails.toMap()}");
     try {
       final response = await http.post(
         url,
         headers: {
           "Accept": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: jsonEncode(saveDetails.toMap()),
       );
+      print("response.statusCode : ${response.statusCode}");
 
       if (response.statusCode == 200) {
         BasicResponse result = BasicResponse.fromJson(json.decode(response.body));
@@ -135,7 +139,8 @@ class CommonRepoImpl {
   Future<void> updateTask(
       {int? id, required TaskModel data, required Function(BasicResponse) onSuccess, required Function(Exception) onFailure}) async {
     String endpoint = "/api/app/tasks/update/$id";
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.getString('token') ?? '';
     final url = Uri.parse(baseUrl + endpoint);
     print("url- > ${url}");
     try {
@@ -143,6 +148,7 @@ class CommonRepoImpl {
         url,
         headers: {
           "Accept": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: jsonEncode(data.toMap()),
       );
