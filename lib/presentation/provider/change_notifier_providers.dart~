@@ -1,0 +1,12 @@
+
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
+import 'login_provider.dart';
+
+class ChangeNotifierProviders {
+  static final List<SingleChildWidget> list = [
+    ChangeNotifierProvider(create: (context) => LoginProvider()),
+    ChangeNotifierProvider(create: (context) => CarListProvider()),
+    ChangeNotifierProvider(create: (context) => CarDetailsProvider()),
+  ];
+}
